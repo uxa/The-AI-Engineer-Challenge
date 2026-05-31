@@ -3,6 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="app-secret" content="70dc0525782c12c596dee6a27ea35a9c74eaf997" />
   <title>Mental Coach — AI Companion</title>
   <style>
     @import url('https://fonts.googleapis.com/css2?family=Segoe+UI:wght@300;400;600&family=Inter:wght@300;400;500;600&display=swap');
@@ -737,6 +738,8 @@
     ? 'http://localhost:8000'
     : '';
 
+  const APP_SECRET = document.querySelector('meta[name="app-secret"]')?.content || '';
+
   const scroll   = document.getElementById('chatScroll');
   const input    = document.getElementById('msgInput');
   const sendBtn  = document.getElementById('sendBtn');
@@ -811,7 +814,10 @@
     try {
       const res = await fetch(`${API_BASE}/api/chat`, {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: {
+          'Content-Type': 'application/json',
+          ...(APP_SECRET && { 'X-App-Secret': APP_SECRET }),
+        },
         body: JSON.stringify({ message: text }),
       });
 
